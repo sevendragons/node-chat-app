@@ -7,14 +7,14 @@ socket.on('connect', function() {
   //   text: 'Hey. This is Nick.'
   // });
 
-  socket.emit('createMessage', {
-    from: 'Nicky',
-    text: 'This just send the message'
-  });
+//   socket.emit('createMessage', {
+//     from: 'Nicky',
+//     text: 'This just send the message'
+//   });
 });
 
 socket.on('disconnect', function() {
-console.log('Disconnected to server');
+  console.log('Disconnected to server');
 });
 
 // socket.on('newEmail', function(email){
@@ -22,4 +22,4 @@ console.log('Disconnected to server');
 // })
 socket.on('newMessage', function(message){
   console.log('newMessage', message);
-})
+});

@@ -34,9 +34,11 @@ socket.emit('newMessage', generateMessage('Admin', 'Welcome to the chat app'));
 
 //socket.bradcast emit from Admin text New user joined
 socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user joined'));
-socket.on('createMessage', (message) => {
+socket.on('createMessage', (message, callback) => {
   console.log('createMessage', message);
-  io.emit('neewMessage', generateMessage(message.from, message.text));
+  io.emit('newMessage', generateMessage(message.from, message.text));
+
+  callback('This is from the server'); //This is relate to the function(data) in index.js
   // socket.broadcast.emit('newMessage', {
   //   from: message.from,
   //   text: message.text,

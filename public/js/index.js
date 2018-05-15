@@ -22,27 +22,62 @@ socket.on('disconnect', function() {
 // })
 socket.on('newMessage', function(message){
   console.log('newMessage', message);
-  var li = jQuery('<li></li>');
+  var li = $('<li></li>');
   li.text(`${message.from}: ${message.text}`);
 
-  jQuery('#message').append(li);
+  $('#message').append(li);
+
+});
+socket.on('newLocationMessage', function(message){
+  console.log('newLocationMessage', message);
+  var li = $('<li></li>');
+  var a = $('<a target="_blank"> My current location</a>');
+  var iframe = $(`<iframe>Test website inside iframe</iframe>`)
+
+  li.text(`${message.from}: `);
+  a.attr('href', message.url);
+  li.append(a);
+  iframe.attr('src', message.url);
+
+  $('#message').append(li);
+  $('#message').append(iframe);
 
 });
 
+/////////////////////////////////////////
 socket.emit('createMessage', {
   from: 'Noidea',
   text: 'Hi'
 }, function(data){                //This syntax relate to the callback() in server.js
   console.log('Got it', data);
 });
+//////////////////////////////////////////
 
-jQuery('#message-form').on('submit', function(e){
+
+$('#message-form').on('submit', function(e){
     e.preventDefault();       //Prevent Default behavior for the events that is  submit event.
 
     socket.emit('createMessage',  {
       from: 'User',
-      text: jQuery('[name=message]' ).val()
+      text: $('[name=message]' ).val()
   }, function(){
 
     });
+});
+
+
+var locationonButton = $('#send-location');
+locationonButton.on('click', function() {
+  if (!navigator.geolocation){
+    return alert('geolocation not supported by your browser.');
+  }
+
+  navigator.geolocation.getCurrentPosition(function(position){
+    socket.emit('createLocationMessage', {
+      latitude: position.coords.latitude,
+      longitude: position.coords.longitude
+    });
+  }, function (){
+    alert('Unable to fetch location');
+  });
 });
